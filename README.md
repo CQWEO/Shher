@@ -1,11 +1,752 @@
--Moonsec Hub Test
-game:GetService("Workspace").CurrentRooms.DescendantAdded:Connect(function(v)
-    if not _G.IncreasedDistance then return end
-    if v.IsA(v,"ProximityPrompt") then
-       if _G.IncreasedDistance then
-           v.MaxActivationDistance *= _G.IncreasedDistance and 2 or 0.5
-       end
+if game.CoreGui:FindFirstChild("FluxLib") or game.CoreGui:FindFirstChild("Message") then return end
+
+local Flux = loadstring(game:HttpGet("https://lolcat.boo/assets/flux-fixed"))()
+local Window = Flux:Window("awesome script  ", "Doors", Color3.new(0,0.8), Enum.KeyCode.RightControl)
+local Tab = Window:Tab("Main", "rbxassetid://6026568198")
+local Tab2 = Window:Tab("Visual", "rbxassetid://6031763426")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TextChatService = game:GetService("TextChatService")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character
+local Backpack = LocalPlayer.Backpack
+local Humanoid = Character:WaitForChild("Humanoid")
+local AvatarIcon = Players:GetUserThumbnailAsync(LocalPlayer.UserId,Enum.ThumbnailType.HeadShot,Enum.ThumbnailSize.Size420x420)
+local MainUI = LocalPlayer.PlayerGui.MainUI
+local Main_Game = MainUI.Initiator.Main_Game
+local Modules = Main_Game.RemoteListener.Modules
+local SpeedBoost = 0
+local ScreechSafeRooms = {}
+local PrimaryPart = Character.PrimaryPart
+local CurrentRooms = workspace.CurrentRooms
+local EntityInfo = ReplicatedStorage.EntityInfo
+local ClientModules = ReplicatedStorage.ClientModules
+local DeathHint = EntityInfo.DeathHint
+local CamLock = EntityInfo.CamLock
+local MotorReplication = EntityInfo.MotorReplication
+local EntityModules = ClientModules.EntityModules
+local ItemESP = false
+local EntityESP = false
+local OtherESP = false
+local EyesOnMap = false
+local InstantInteract = false
+local IncreasedDistance = false
+local InteractNoclip = false
+local EnableInteractions = false
+local DisableDupe = false
+local DisableSeek = false
+local NoDark = false
+local Noclip = false
+local DisableTimothy = false
+local DisableA90 = false
+local NoclipNext = false
+local IsExiting = false
+local RemoveDeathHint = false
+local ClosetExitFix = false
+local NoBreaker = false
+local DisableEyes = false
+local DisableGlitch = false
+local DisableSnare = false
+local WasteItems = false
+local ScreechModule
+local CustomScreechModule
+local TimothyModule
+local CustomTimothyModule
+local A90Module
+local CustomA90Module
+local DoorRange
+local SpoofMotor
+local ESP_Items = {KeyObtain={"Key",1.5},LiveHintBook={"Book",1.5},Lighter={"Lighter",1.5},Lockpick={"Lockpicks",1.5},Vitamins={"Vitamins",1.5},Crucifix={"Crucifix",1.5},CrucifixWall={"Crucifix",1.5},SkeletonKey={"Skeleton Key",1.5},Flashlight={"Flashlight",1.5},Candle={"Candle",1.5},LiveBreakerPolePickup={"Fuse",1.5},Shears={"Shears",1.5},Battery={"Battery",1.5},PickupItem={"Paper",1.5},ElectricalKeyObtain={"Electrical Key",1.5},Shakelight={"Shakelight",1.5},Scanner={"iPad",1.5}}
+local ESP_Entities = {RushMoving={"Rush",5},AmbushMoving={"Ambush",5},FigureRagdoll={"Figure",7},FigureLibrary={"Figure",7},SeekMoving={"Seek",5.5},Screech={"Screech",2},Eyes={"Eyes",4},Snare={"Snare",2},A60={"A-60",10},A120={"A-120",10}}
+local ESP_Other = {Door={"Door",5},LeverForGate={"Lever",3},GoldPile={"Gold",0.5},Bandage={"Bandage",0.5}}
+local MainFrame = MainUI.MainFrame
+local GameData = ReplicatedStorage.GameData
+local LatestRoom = GameData.LatestRoom
+local Floor = GameData.Floor
+local OldEnabled = {}
+local Module_Events = require(ClientModules.Module_Events)
+local ShatterFunction = Module_Events.shatter
+local HideTick = tick()
+local GlitchModule = EntityModules.Glitch
+local CustomGlitchModule = GlitchModule:Clone()
+local Ranks = {
+    Creator = {
+        Title = "awesome script creator",
+        Color = Color3.new(0,0.8,0)
+    },
+    MrHong = {
+        Title = "Mr. Hong",
+        Color = Color3.new(0.9,0,0)
+    },
+    Cool = {
+        Title = "Cool",
+        Color = Color3.new(0,0.7,1)
+    },
+    Greg = {
+        Title = "official greg heffley",
+        Color = Color3.new(0.3,0.3,0.3)
+    }
+}
+local PlayerRanks = {
+    ["2615068449"] = "Creator",
+    ["2300945089"] = "MrHong",
+    ["152169512"] = "Cool",
+    ["1160958289"] = "Cool",
+    ["211059753"] = "Greg",
+    ["47466584"] = "Cool"
+}
+CustomGlitchModule.Name = "CustomGlitch"
+CustomGlitchModule.Parent = GlitchModule.Parent
+GlitchModule:Destroy()
+EntityInfo.UseEnemyModule.OnClientEvent:Connect(function(Entity,x,...)
+    if Entity == "Glitch" then
+        if not DisableGlitch then
+            require(CustomGlitchModule).stuff(require(Main_Game),table.unpack({...}))
+        end
     end
 end)
---<<>>-->
-local v0=loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/BlackKing/main/Gui%20Lib%20%5BLibrary%5D"))();local v1=loadstring(game:HttpGet("https://raw.githubusercontent.com/CQWEO/COLORS/main/README.md"))();local v2=loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/Gui/main/Gui%20Lib%20%5BSaveManager%5D"))();local v3=loadstring(game:HttpGet("https://raw.githubusercontent.com/KINGHUB01/BlackKing/main/Blackking%20%5BGuiNew!%5D"))();local v4=Instance.new("Sound");v4.Parent=game.SoundService;v4.SoundId="rbxassetid://4590657391";v4.Volume=5;v4.PlayOnRemove=true;v4:Destroy();v3:Introduction();wait(1);v0:Notify("Loaded");local v10={"RushMoving","AmbushMoving","Snare","A60","A120","SeekMoving","JeffTheKiller","Eyes"};local v11={"Candle","Crucifix","SkeletonKey","Vitamins","Lockpick","Lighter","Flashlight"};local v12=game.Players.LocalPlayer;local v13=v12.Character or v12.CharacterAdded:Wait() ;local v14=v13:FindFirstChildOfClass("Humanoid") or v13:WaitForChild("Humanoid") ;if  not fireproximityprompt then local v226=Instance.new("Message",workspace);v226.Text="you have fireproximityprompt function bro get better executor";task.wait(12 -6 );v226:Destroy();error("no prox");end function esp(v63,v64,v65,v66)local v67=0 -0 ;local v68;local v69;local v70;local v71;while true do if (v67==(1 + 2)) then if (v65 and v66) then local v431=1690 -(1121 + 569) ;local v432;local v433;while true do if (v431==2) then v432.Size=UDim2.new(214 -(22 + 192) ,691 -(483 + 200) ,0,8);v432.Position=UDim2.new(1463.5 -(1404 + 59) ,0 -0 ,0.5,0 -0 );Instance.new("UICorner",v432).CornerRadius=UDim.new(1,765 -(468 + 297) );Instance.new("UIStroke",v432);v431=565 -(334 + 228) ;end if (v431==3) then v433=Instance.new("TextLabel",v69);v433.AnchorPoint=Vector2.new(0.5 -0 ,0.5 -0 );v433.BackgroundTransparency=1 -0 ;v433.BackgroundColor3=v64;v431=2 + 2 ;end if (5==v431) then v433.FontSize=Enum.FontSize.Size10;v433.Text=v66;Instance.new("UIStroke",v433);task.spawn(function()while v69 do if ((v69.Adornee==nil) or  not v69.Adornee:IsDescendantOf(workspace)) then local v882=236 -(141 + 95) ;while true do if (v882==(0 + 0)) then v69.Enabled=false;v69.Adornee=nil;v882=1;end if (v882==1) then v69:Destroy();break;end end end task.wait();end end);break;end if (v431==4) then v433.TextColor3=v64;v433.Size=UDim2.new(2 -1 ,0 -0 ,0 + 0 ,136 -86 );v433.Position=UDim2.new(0.5,0,0.6,0);v433.Font=Enum.Font.Gotham;v431=4 + 1 ;end if (1==v431) then v69.MaxDistance=1042 + 958 ;v432=Instance.new("Frame",v69);v432.AnchorPoint=Vector2.new(0.5 -0 ,0.5);v432.BackgroundColor3=v64;v431=2 + 0 ;end if ((163 -(92 + 71))==v431) then v69=Instance.new("BillboardGui",game.CoreGui);v69.AlwaysOnTop=true;v69.Size=UDim2.new(0,400,0 + 0 ,168 -68 );v69.Adornee=v65;v431=766 -(574 + 191) ;end end end v71={};v67=4 + 0 ;end if ((9 -5)==v67) then v71.delete=function()for v434,v435 in pairs(v70) do local v436=0 + 0 ;while true do if (v436==(849 -(254 + 595))) then v435.Adornee=nil;v435.Visible=false;v436=127 -(55 + 71) ;end if (v436==1) then v435:Destroy();break;end end end if v69 then local v505=0 -0 ;while true do if (v505==(1791 -(573 + 1217))) then v69:Destroy();break;end if (v505==0) then v69.Enabled=false;v69.Adornee=nil;v505=2 -1 ;end end end end;return v71;end if (v67==(1 + 1)) then for v363,v364 in pairs(v68) do if v364:IsA("BasePart") then table.insert(v70,box);task.spawn(function()while box do local v704=0 -0 ;while true do if (v704==(939 -(714 + 225))) then if ((box.Adornee==nil) or  not box.Adornee:IsDescendantOf(workspace)) then box.Adornee=nil;box.Visible=false;box:Destroy();end task.wait();break;end end end end);end end function hightlightoutboi(v365,v366)local v367;if v366:FindFirstChildOfClass("Highlight") then v367=v366:FindFirstChildOfClass("Highlight");v367.OutlineColor=v365;v367.OutlineTransparency=0 -0 ;v367.FillColor=v365;v367.FillTransparency=0.5 -0 ;else local v510=0 + 0 ;while true do if (v510==(2 -0)) then v367.FillTransparency=806.5 -(118 + 688) ;v367.OutlineColor=v365;v510=51 -(25 + 23) ;end if (v510==(0 + 0)) then v367=Instance.new("Highlight",v366);v367.Enabled=true;v510=1887 -(927 + 959) ;end if (v510==(3 -2)) then v367.Name="Esphihihi";v367.FillColor=v365;v510=734 -(16 + 716) ;end if (v510==(5 -2)) then v367.OutlineTransparency=0;break;end end end local v368={};v368.delete=function()v367:Destroy();end;return v368;end v67=100 -(11 + 86) ;end if (v67==(2 -1)) then v69=nil;v70={};v67=287 -(175 + 110) ;end if (v67==(0 -0)) then v68=nil;if (typeof(v63)=="Instance") then if v63:IsA("Model") then v68=v63:GetChildren();elseif v63:IsA("BasePart") then v68={v63,table.unpack(v63:GetChildren())};end elseif (typeof(v63)=="table") then v68=v63;end v67=1797 -(503 + 1293) ;end end end local v15=game.ReplicatedStorage:WaitForChild("EntityInfo");function message(v72)local v73=0 -0 ;local v74;while true do if (v73==1) then task.wait(4 + 1 );v74:Destroy();break;end if (v73==0) then v74=Instance.new("Message",workspace);v74.Text=tostring(v72);v73=1;end end end local v16={espdoors=false,espkeys=false,espitems=false,espbooks=false,esprush=false,espchest=false,esplocker=false,esphumans=false,espgold=false,goldespvalue=1061 -(810 + 251) ,hintrush=false,hintrushhee=false,light=false,instapp=false,noseek=false,nogates=false,nopuzzle=false,noa90=false,noskeledoors=false,noseekarmsfire=false,noscreech=false,nodupe=false,getcode=false,getcodet=false,roomsnolock=false,draweraura=false,autorooms=false,itemsaura=false,autopulllever=false,bookcollecter=false,breakercollecter=false};local v17={table.unpack(v16)};local v18={doors={},keys={},items={},books={},entity={},chests={},lockers={},people={},gold={}};local v19=CFrame.new;local v20=game:GetService("ReplicatedStorage").GameData.LatestRoom;local v21=game:GetService("ReplicatedStorage").GameData.ChaseStart;local v22;v22=hookmetamethod(game,"__namecall",function(v75,...)local v76=0 + 0 ;local v77;local v78;while true do if (v76==(0 + 0)) then v77={...};v78=getnamecallmethod();v76=534 -(43 + 490) ;end if (v76==(734 -(711 + 22))) then if ((tostring(v75)=="Screech") and (v78=="FireServer") and getgenv().avoidsc) then local v437=0;while true do if (v437==(0 -0)) then v77[860 -(240 + 619) ]=true;return v22(v75,unpack(v77));end end end if ((tostring(v75)=="ClutchHeartbeat") and (v78=="FireServer") and getgenv().winhb) then v77[2]=true;return v22(v75,unpack(v77));end v76=1 + 1 ;end if (v76==(2 -0)) then return v22(v75,...);end end end);workspace.ChildAdded:Connect(function(v79)task.wait();if ((v79.Name=="RushMoving") or (v79.Name=="AmbushMoving")) then while workspace:FindFirstChild(v79.Name) and getgenv().hxde  do task.wait();part=v79:WaitForChild("RushNew");game.Players.LocalPlayer.Character.Collision.CFrame=CFrame.new(part.Position + Vector3.new(0 + 0 ,1819 -(1344 + 400) ,0) );end end end);local v23=Instance.new("ScreenGui");local v24=Instance.new("Frame");local v25=Instance.new("TextButton");v23.Name="GodmodeMobile";v23.Parent=game:WaitForChild("CoreGui");v23.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;game:GetService("CoreGui").GodmodeMobile.Enabled=false;v24.Parent=v23;v24.BackgroundColor3=Color3.fromRGB(405 -(255 + 150) ,255,0 + 0 );v24.Position=UDim2.new(0.412993044,0,0.0562249012 + 0 ,0);v24.Size=UDim2.new(0 -0 ,645 -445 ,0,1785 -(404 + 1335) );v25.Parent=v24;v25.BackgroundColor3=Color3.fromRGB(661 -(183 + 223) ,0 -0 ,0 + 0 );v25.Position=UDim2.new(0.0350000001 + 0 ,0,0.0652173907,0);v25.Size=UDim2.new(337 -(10 + 327) ,187,0,40);v25.Font=Enum.Font.SourceSans;v25.Text="God Mode : off";v25.TextColor3=Color3.fromRGB(0 + 0 ,0,0);v25.TextSize=374 -(118 + 220) ;v25.MouseButton1Down:connect(function()if (_G.godkuy==true) then local v238=0;local v239;local v240;local v241;while true do if (v238==(1 + 1)) then v239=game.Players.LocalPlayer.Character:FindFirstChild("Collision");v239.Position=v239.Position + Vector3.new(449 -(108 + 341) ,5,0) ;v240=nil;v238=2 + 1 ;end if (v238==(21 -16)) then v241.Volume=1498 -(711 + 782) ;v241.PlayOnRemove=true;v241:Destroy();break;end if (v238==(5 -2)) then function v240(v511)firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent,v511);end v240("GodMode Disabled");v25.Text="God Mode : Off";v238=4;end if (v238==(473 -(270 + 199))) then v241=Instance.new("Sound");v241.Parent=game.SoundService;v241.SoundId="rbxassetid://4590657391";v238=2 + 3 ;end if (v238==0) then _G.godkuy=false;getgenv().colgod=false;for v512,v513 in next,game.Players.LocalPlayer.Character:GetDescendants() do if (v513.IsA(v513,"BasePart") and (getgenv().colgod==false)) then v513.CanCollide=true;end end v238=1820 -(580 + 1239) ;end if (v238==1) then v239=game.Players.LocalPlayer.Character:FindFirstChild("Collision");v239.Position=v239.Position + Vector3.new(0 -0 ,5 + 0 ,0 + 0 ) ;wait(0.5 + 0 );v238=4 -2 ;end end elseif (_G.godkuy==false) then local v370=0;local v371;local v372;local v373;while true do if (v370==2) then function v372(v707)firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent,v707);end v372("GodMode Enabled");v25.Text="God Mode : On";v373=Instance.new("Sound");v370=2 + 1 ;end if (v370==(1170 -(645 + 522))) then v373.Parent=game.SoundService;v373.SoundId="rbxassetid://4590657391";v373.Volume=1795 -(1010 + 780) ;v373.PlayOnRemove=true;v370=4 + 0 ;end if (v370==(19 -15)) then v373:Destroy();break;end if (v370==(0 -0)) then _G.godkuy=true;v371=game.Players.LocalPlayer.Character:FindFirstChild("Collision");v371.Position=v371.Position-Vector3.new(0,1841 -(1045 + 791) ,0 -0 ) ;wait(0.5 -0 );v370=506 -(351 + 154) ;end if (v370==(1575 -(1281 + 293))) then getgenv().colgod=true;v371=game.Players.LocalPlayer.Character:FindFirstChild("Collision");v371.Position=v371.Position-Vector3.new(266 -(28 + 238) ,10 -5 ,1559 -(1381 + 178) ) ;v372=nil;v370=2;end end end end);local v4=Instance.new("Sound");v4.Parent=game.SoundService;v4.SoundId="rbxassetid://4590657391";v4.Volume=5 + 0 ;v4.PlayOnRemove=true;v4:Destroy();local v44=v0:CreateWindow({Title="MSHUB  - (v4.5) DOORS" ,Center=true,AutoShow=true,TabPadding=5,MenuFadeTime=0.2 + 0 });local v45={Main=v44:AddTab("Main")};local v46=v45.Main:AddLeftGroupbox("Notifiers");v46:AddToggle("MyToggle",{Text="Notify Entities",Default=false,Tooltip="Enable Event Notify",Callback=function(v163)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();v16.hintrush=v163;if v163 then local v301=0 + 0 ;local v302;while true do if (v301==(1317 -(486 + 831))) then v302=nil;v302=workspace.ChildAdded:Connect(function(v596)if table.find(v10,v596.Name) then repeat task.wait();until (v12:DistanceFromCharacter(v596:GetPivot().Position)<1000) or  not v596:IsDescendantOf(workspace)  if v596:IsDescendantOf(workspace) then if (v596.Name=="RushMoving") then v0:Notify("[Event Notifier] : Rush Is Coming Find Hide Spot");local v913=Instance.new("Sound");v913.Parent=game.SoundService;v913.SoundId="rbxassetid://4590657391";v913.Volume=5;v913.PlayOnRemove=true;v913:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Rush "   .. _G.kuychatez );end elseif (v596.Name=="AmbushMoving") then v0:Notify("[Event Notifier] : Ambush Is Coming Find Hide Spot");local v964=Instance.new("Sound");v964.Parent=game.SoundService;v964.SoundId="rbxassetid://4590657391";v964.Volume=12 -7 ;v964.PlayOnRemove=true;v964:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Ambush "   .. _G.kuychatez );end elseif (v596.Name=="SeekMoving") then v0:Notify("[Event Notifier] : Seek Chase GoodLuck");local v1023=Instance.new("Sound");v1023.Parent=game.SoundService;v1023.SoundId="rbxassetid://4590657391";v1023.Volume=17 -12 ;v1023.PlayOnRemove=true;v1023:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Seek Chase GoodLuck");end elseif (v596.Name=="A60") then local v1044=0 + 0 ;local v1045;while true do if (v1044==3) then v1045:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("A60 "   .. _G.kuychatez );end break;end if (v1044==(6 -4)) then v1045.Volume=1268 -(668 + 595) ;v1045.PlayOnRemove=true;v1044=3 + 0 ;end if (v1044==(0 + 0)) then v0:Notify("[Event Notifier] : A60 Is Coming Find Locker");v1045=Instance.new("Sound");v1044=1;end if (v1044==1) then v1045.Parent=game.SoundService;v1045.SoundId="rbxassetid://4590657391";v1044=2;end end elseif (v596.Name=="A120") then local v1060=0 -0 ;local v1061;while true do if (v1060==(293 -(23 + 267))) then v1061:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("A120 "   .. _G.kuychatez );end break;end if (v1060==0) then v0:Notify("[Event Notifier] : A120 Is Coming Find Locker");v1061=Instance.new("Sound");v1060=1945 -(1129 + 815) ;end if (v1060==(389 -(371 + 16))) then v1061.Volume=1755 -(1326 + 424) ;v1061.PlayOnRemove=true;v1060=3;end if (v1060==(1 -0)) then v1061.Parent=game.SoundService;v1061.SoundId="rbxassetid://4590657391";v1060=2;end end elseif (v596.Name=="JeffTheKiller") then local v1083=0 -0 ;local v1084;while true do if (v1083==1) then v1084.Parent=game.SoundService;v1084.SoundId="rbxassetid://4590657391";v1083=120 -(88 + 30) ;end if (v1083==(773 -(720 + 51))) then v1084.Volume=11 -6 ;v1084.PlayOnRemove=true;v1083=1779 -(421 + 1355) ;end if (v1083==(4 -1)) then v1084:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Jeff The Killer Spawn In Next Door Be Careful");end break;end if (v1083==0) then v0:Notify("[Event Notifier] : Jeff The Killer Spawn In Next Door Be Careful");v1084=Instance.new("Sound");v1083=1 + 0 ;end end elseif (v596.Name=="Eyes") then local v1106=1083 -(286 + 797) ;local v1107;while true do if (v1106==3) then v1107:Destroy();if (_G.chat==true) then game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Eyes Spawn Do not Look At him");end break;end if (v1106==1) then v1107.Parent=game.SoundService;v1107.SoundId="rbxassetid://4590657391";v1106=2;end if (2==v1106) then v1107.Volume=18 -13 ;v1107.PlayOnRemove=true;v1106=4 -1 ;end if (v1106==(439 -(397 + 42))) then v0:Notify("[Event Notifier] : Eyes Spawn Do not Look At Him");v1107=Instance.new("Sound");v1106=1 + 0 ;end end end end end end);v301=801 -(24 + 776) ;end if (v301==(1 -0)) then repeat task.wait();until  not v16.hintrush v302:Disconnect();break;end end end end});v46:AddToggle("MyToggle",{Text="Notify Entities in Chat",Default=false,Tooltip="Chat Notify",Callback=function(v166)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();_G.chat=v166;end});v46:AddToggle("MyToggle",{Text="Item Event",Default=false,Tooltip="Enable Item Event Notify",Callback=function(v165)ItemNotifyboi=v165;end});local v46=v45.Main:AddLeftGroupbox("Main");v46:AddToggle("MyToggle",{Text="Instant Use",Default=false,Tooltip="Fast E",Callback=function(v91)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();local v92=0 -0 ;while true do if (v92==(0 -0)) then _G.InstantInteract=v91;if (_G.InstantInteract==true) then for v519,v520 in pairs(game:GetService("Workspace").CurrentRooms:GetDescendants()) do if v520:IsA("ProximityPrompt") then v520.HoldDuration=0 + 0 ;v520.Enabled=true;end end end break;end end end});v46:AddToggle("MyToggle",{Text="Reach",Default=false,Tooltip="Press E Far",Callback=function(v93)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();_G.IncreasedDistance=v93;for v228,v229 in pairs(game:GetService("Workspace").CurrentRooms:GetDescendants()) do if v229:IsA("ProximityPrompt") then v229.MaxActivationDistance=7 + 8 ;end end end});game:GetService("RunService").RenderStepped:Connect(function()pcall(function()if _G.IncreasedDoors then game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Door").ClientOpen:FireServer();end end);end);v46:AddToggle("MyToggle",{Text="Door Reach",Default=false,Tooltip="Door Opening Far",Callback=function(v103)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();_G.IncreasedDoors=v103;end});local v46=v45.Main:AddLeftGroupbox("Misc");v46:AddToggle("MyToggle",{Text="No Gates",Default=false,Tooltip="Remove Gate Doors",Callback=function(v115)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();v16.nogates=v115;if v115 then spawn(function()for v390,v391 in pairs(workspace.CurrentRooms:GetChildren()) do local v392=0;local v393;while true do if ((881 -(614 + 267))==v392) then v393=v391:WaitForChild("Gate",34 -(19 + 13) );if v393 then local v798=v393:WaitForChild("ThingToOpen",2 -0 );if v798 then v798:Destroy();end end break;end end end end);local v278;v278=workspace.CurrentRooms.ChildAdded:Connect(function(v327)local v328=0 -0 ;local v329;while true do if (v328==(0 -0)) then v329=v327:WaitForChild("Gate",1 + 1 );if v329 then local v742=0 -0 ;local v743;while true do if (v742==(0 -0)) then v743=v329:WaitForChild("ThingToOpen",1814 -(1293 + 519) );if v743 then v743:Destroy();end break;end end end break;end end end);spawn(function()local v330=0 -0 ;local v331;while true do if ((0 -0)==v330) then v331=workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Gate",3 -1 );if v331 then local v744=0;local v745;while true do if (v744==(0 -0)) then v745=v331:WaitForChild("ThingToOpen",4 -2 );if v745 then v745:Destroy();end break;end end end break;end end end);repeat task.wait();until  not v16.nogates v278:Disconnect();end end});v46:AddToggle("MyToggle",{Text="No Puzzle Doors",Default=false,Tooltip="Remove Puzzle Doors",Callback=function(v117)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();local v118=0 + 0 ;while true do if (v118==0) then v16.nopuzzle=v117;if v117 then spawn(function()for v634,v635 in pairs(workspace.CurrentRooms:GetChildren()) do local v636=0 + 0 ;local v637;local v638;while true do if (v636==(0 -0)) then v637=v635:WaitForChild("Assets");v638=v637:WaitForChild("Paintings",1 + 1 );v636=1 + 0 ;end if (v636==(1 + 0)) then if v638 then local v885=v638:WaitForChild("MovingDoor",1098 -(709 + 387) );if v885 then v885:Destroy();end end break;end end end end);local v466;v466=workspace.CurrentRooms.ChildAdded:Connect(function(v535)local v536=v535:WaitForChild("Assets");local v537=v536:WaitForChild("Paintings",1860 -(673 + 1185) );if v537 then local v746=0 -0 ;local v747;while true do if (v746==0) then v747=v537:WaitForChild("MovingDoor",6 -4 );if v747 then v747:Destroy();end break;end end end end);spawn(function()local v538=0;local v539;local v540;while true do if (v538==0) then v539=workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Assets");v540=v539:WaitForChild("Paintings",2);v538=1 -0 ;end if (v538==(1 + 0)) then if v540 then local v867=v540:WaitForChild("MovingDoor",2 + 0 );if v867 then v867:Destroy();end end break;end end end);repeat task.wait();until  not v16.nopuzzle v466:Disconnect();end break;end end end});game:GetService("RunService").RenderStepped:Connect(function()pcall(function()if _G.NoluckNoob then if game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:FindFirstChild("RoomsDoor_Entrance") then game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("RoomsDoor_Entrance").Chain1:Destroy();game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("RoomsDoor_Entrance").Chain2:Destroy();game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("RoomsDoor_Entrance").Model:Destroy();game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("RoomsDoor_Entrance").SkullLock:Destroy();game.workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("RoomsDoor_Entrance").Door.EnterPrompt.Enabled=true;end end end);end);v46:AddToggle("MyToggle",{Text="No Lock A-000",Default=false,Tooltip="A-000 No lock",Callback=function(v101)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();_G.NoluckNoob=v101;end});v46:AddToggle("MyToggle",{Text="No Skeleton Door",Default=false,Callback=function(v113)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();v16.noskeledoors=v113;if v113 then local v276=0 + 0 ;local v277;while true do if ((0 -0)==v276) then v277=nil;v277=workspace.CurrentRooms.ChildAdded:Connect(function(v532)local v533=v532:WaitForChild("Wax_Door",2 + 0 );if v533 then v533.Door.Transparency=772 -(326 + 445) ;v533.SkullLock.Transparency=1;v533.Door.CanCollide=false;v533.SkullLock.CanCollide=false;end end);v276=4 -3 ;end if (v276==(4 -2)) then v277:Disconnect();break;end if ((2 -1)==v276) then spawn(function()local v534=workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]:WaitForChild("Wax_Door",2);if v534 then v534.Door.Transparency=712 -(530 + 181) ;v534.SkullLock.Transparency=1;v534.Door.CanCollide=false;v534.SkullLock.CanCollide=false;end end);repeat task.wait();until  not v16.noskeledoors v276=2;end end end end});local v46=v45.Main:AddRightGroupbox("Auto");if fireproximityprompt then v46:AddToggle("MyToggle",{Text="Auto Items",Default=false,Tooltip="Auto Pick Item And Keys",Callback=function(v280)local v281=0;while true do if (0==v281) then v16.itemsaura=v280;if v280 then local function v639(v748)local v749=0 -0 ;local v750;local v751;while true do if ((3 -1)==v749) then for v886,v887 in pairs(v748:GetDescendants()) do task.spawn(function()v750(v887);end);end task.spawn(function()repeat task.wait();until  not v16.itemsaura v751:Disconnect();end);break;end if ((1881 -(446 + 1434))==v749) then v751=nil;v751=v748.DescendantAdded:Connect(function(v888)v750(v888);end);v749=1285 -(1040 + 243) ;end if (v749==(0 -0)) then v750=nil;function v750(v889)task.wait();if v889:IsA("Model") then local v957=1847 -(559 + 1288) ;while true do if (v957==(1931 -(609 + 1322))) then task.wait();if (v889.Name=="PickupItem") then local v1048=0;local v1049;local v1050;while true do if (1==v1048) then v1050=454 -(13 + 441) ;task.spawn(function()repeat local v1103=0 -0 ;local v1104;while true do if (1==v1103) then pcall(function()local v1137=0;local v1138;local v1139;while true do if (0==v1137) then v1138,v1139=pcall(function()v1104=v12:DistanceFromCharacter(v889.PrimaryPart.Position)<=(31 -19) ;end);if v1139 then local v1154=0 -0 ;local v1155;while true do if (v1154==(0 + 0)) then v1155=nil;for v1170,v1171 in pairs(v1171:GetChildren()) do local v1172=pcall(function()local v1178=v1171['Position'];end);if v1172 then v1155=v1171;break;end end v1154=3 -2 ;end if (v1154==1) then v1104=v12:DistanceFromCharacter(v1155.Position)<=(5 + 7) ;break;end end end break;end end end);if v1104 then fireproximityprompt(v1049);v1050+=1 end break;end if (v1103==0) then task.wait(0.1);v1104=false;v1103=1;end end until  not v889:IsDescendantOf(workspace) or  not v1049:IsDescendantOf(workspace) or  not v16.itemsaura or (v1050>(9 + 11))  end);break;end if (v1048==0) then if ((game:GetService("ReplicatedStorage").GameData.LatestRoom.Value==(151 -100)) or (game:GetService("ReplicatedStorage").GameData.LatestRoom.Value==(29 + 23))) then return;end v1049=v889:WaitForChild("ModulePrompt");v1048=1 -0 ;end end elseif (v889:GetAttribute("Pickup") or v889:GetAttribute("PropType")) then if ((game:GetService("ReplicatedStorage").GameData.LatestRoom.Value==51) or (game:GetService("ReplicatedStorage").GameData.LatestRoom.Value==(35 + 17))) then return;end local v1063=v889:WaitForChild("ModulePrompt",2 + 0 );if (v1063==nil) then local v1085=0;while true do if (v1085==(0 + 0)) then v1063=v889:FindFirstChildWhichIsA("ProximityPrompt");if (v1063==nil) then for v1143,v1144 in pairs(v889:GetDescendants()) do if v1144:IsA("ProximityPrompt") then v1063=v1144;break;end end end break;end end end task.spawn(function()repeat local v1086=0;local v1087;while true do if (v1086==(0 + 0)) then task.wait(0.1 + 0 );v1087=false;v1086=1;end if (v1086==1) then pcall(function()local v1127=0;local v1128;local v1129;while true do if (v1127==(433 -(153 + 280))) then v1128,v1129=pcall(function()v1087=v12:DistanceFromCharacter(v889.PrimaryPart.Position)<=12 ;end);if v1129 then local v1153;for v1156,v1157 in pairs(v1157:GetChildren()) do local v1158=pcall(function()local v1163=v1157['Position'];end);if v1158 then v1153=v1157;break;end end v1087=v12:DistanceFromCharacter(v1153.Position)<=(34 -22) ;end break;end end end);if v1087 then fireproximityprompt(v1063);end break;end end until  not v889:IsDescendantOf(workspace) or  not v1063:IsDescendantOf(workspace) or  not v16.itemsaura  end);elseif (v889.Name=="Green_Herb") then local v1088=0;local v1089;while true do if (v1088==(0 + 0)) then v1089=v889:WaitForChild("Plant");if v1089 then local v1140=0 + 0 ;local v1141;local v1142;while true do if (v1140==(1 + 0)) then task.spawn(function()repeat local v1159=0 + 0 ;local v1160;while true do if (v1159==(1 + 0)) then pcall(function()local v1173=0 -0 ;local v1174;local v1175;while true do if (v1173==(0 + 0)) then v1174,v1175=pcall(function()v1160=v12:DistanceFromCharacter(v889.PrimaryPart.Position)<=(679 -(89 + 578)) ;end);if v1175 then local v1183;for v1184,v1185 in pairs(v1185:GetChildren()) do local v1186=pcall(function()local v1187=v1185['Position'];end);if v1186 then v1183=v1185;break;end end v1160=v12:DistanceFromCharacter(v1183.Position)<=(9 + 3) ;end break;end end end);if v1160 then fireproximityprompt(v1141);v1142+=(1 -0) end break;end if (v1159==(1049 -(572 + 477))) then task.wait(0.1 + 0 );v1160=false;v1159=1;end end until v1141:GetAttribute("Interactions") or  not v16.draweraura or (v1142>(22 + 13))  end);break;end if (v1140==(0 + 0)) then v1141=v1089:WaitForChild("HerbPrompt");v1142=0;v1140=87 -(84 + 2) ;end end end break;end end elseif ((v889.Name=="KeyObtain") or (v889.Name=="ElectricalKeyObtain")) then local v1108=v889:WaitForChild("ModulePrompt");local v1109=v1108:GetAttribute("Interactions");if  not v1109 then task.spawn(function()repeat local v1145=0;local v1146;while true do if (v1145==(0 -0)) then task.wait(0.1 + 0 );v1146=false;v1145=843 -(497 + 345) ;end if (v1145==(1 + 0)) then pcall(function()local v1161,v1162=pcall(function()v1146=v12:DistanceFromCharacter(v889.PrimaryPart.Position)<=14 ;end);if v1162 then local v1164;for v1167,v1168 in pairs(v1168:GetChildren()) do local v1169=pcall(function()local v1176=v1168['Position'];end);if v1169 then v1164=v1168;break;end end v1146=v12:DistanceFromCharacter(v1164.Position)<=(3 + 11) ;end end);if v1146 then fireproximityprompt(v1108);end break;end end until v1108:GetAttribute("Interactions") or  not v16.draweraura  end);end elseif (v889.Name=="RolltopContainer") then local v1130=v889:WaitForChild("ActivateEventPrompt");local v1131=v1130:GetAttribute("Interactions");if  not v1131 then task.spawn(function()repeat local v1151=1333 -(605 + 728) ;local v1152;while true do if ((0 + 0)==v1151) then task.wait(0.1 -0 );v1152=false;v1151=1 + 0 ;end if (v1151==(3 -2)) then pcall(function()local v1165,v1166=pcall(function()v1152=v12:DistanceFromCharacter(v889.PrimaryPart.Position)<=12 ;end);if v1166 then local v1177;for v1179,v1180 in pairs(v1180:GetChildren()) do local v1181=pcall(function()local v1182=v1180['Position'];end);if v1181 then v1177=v1180;break;end end v1152=v12:DistanceFromCharacter(v1177.Position)<=(11 + 1) ;end end);if v1152 then fireproximityprompt(v1130);end break;end end until v1130:GetAttribute("Interactions") or  not v16.itemsaura  end);end end break;end end end end v749=2 -1 ;end end end local v640;v640=workspace.CurrentRooms.ChildAdded:Connect(function(v752)v639(v752);end);for v753,v754 in pairs(workspace.CurrentRooms:GetChildren()) do if v754:FindFirstChild("Assets") then v639(v754);end end v639(workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]);repeat task.wait();until  not v16.itemsaura v640:Disconnect();end break;end end end});else v0:Notify("You need to get fireproximityprompt.");end if fireproximityprompt then v46:AddToggle("MyToggle",{Text="Auto Lever",Default=false,Tooltip="Lever Aura",Callback=function(v282)local v283=0 + 0 ;while true do if (v283==0) then v16.autopulllever=v282;if v282 then local function v641(v755)local v756=0;local v757;local v758;while true do if (v756==(491 -(457 + 32))) then for v890,v891 in pairs(v755:GetDescendants()) do v757(v891);end task.spawn(function()local v892=0 + 0 ;while true do if (v892==(1402 -(832 + 570))) then repeat task.wait();until  not v16.autopulllever v758:Disconnect();break;end end end);break;end if (v756==(0 + 0)) then v757=nil;function v757(v893)if (v893.Name=="LeverForGate") then local v958=v893:WaitForChild("ActivateEventPrompt");local v959=0 + 0 ;pcall(function()v893.PrimaryPart:WaitForChild("SoundToPlay").Played:Connect(function()v959=353 -253 ;end);end);task.spawn(function()repeat local v1012=0 + 0 ;local v1013;while true do if (v1012==(797 -(588 + 208))) then pcall(function()local v1053=0;local v1054;local v1055;while true do if (v1053==(0 -0)) then v1054,v1055=pcall(function()v1013=v12:DistanceFromCharacter(v893.PrimaryPart.Position)<=16 ;end);if v1055 then local v1110=1800 -(884 + 916) ;local v1111;while true do if (v1110==(1 -0)) then v1013=v12:DistanceFromCharacter(v1111.Position)<=(10 + 6) ;break;end if (v1110==(653 -(232 + 421))) then v1111=nil;for v1147,v1148 in pairs(v1148:GetChildren()) do local v1149=pcall(function()local v1150=v1148['Position'];end);if v1149 then v1111=v1148;break;end end v1110=1890 -(1569 + 320) ;end end end break;end end end);if v1013 then fireproximityprompt(v958);v959+=(1 + 0) end break;end if (v1012==(0 + 0)) then task.wait(0.1);v1013=false;v1012=3 -2 ;end end until  not v893:IsDescendantOf(workspace) or  not v958:IsDescendantOf(workspace) or  not v16.autopulllever or (v959>(655 -(316 + 289)))  end);end end v756=2 -1 ;end if (v756==(1 + 0)) then v758=nil;v758=v755.DescendantAdded:Connect(function(v894)v757(v894);end);v756=1455 -(666 + 787) ;end end end if (v16.autopulllever==true) then local v799;v799=workspace.CurrentRooms.ChildAdded:Connect(function(v829)v641(v829);end);for v830,v831 in pairs(workspace.CurrentRooms:GetChildren()) do if v831:FindFirstChild("Assets") then v641(v831);end end v641(workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]);repeat task.wait();until  not v16.autopulllever v799:Disconnect();end end break;end end end});else v0:Notify("You need to get fireproximityprompt.");end if fireproximityprompt then v46:AddToggle("MyToggle",{Text="Auto Book",Default=false,Tooltip="Auto Pick Book",Callback=function(v284)v16.bookcollecter=v284;if v284 then local v394=425 -(360 + 65) ;local v395;while true do if ((0 + 0)==v394) then v395=nil;function v395(v759)local v760=254 -(79 + 175) ;local v761;local v762;while true do if ((2 -0)==v760) then for v895,v896 in pairs(v759:GetDescendants()) do v761(v896);end task.spawn(function()local v897=0 + 0 ;while true do if (v897==0) then repeat task.wait();until  not v16.bookcollecter v762:Disconnect();break;end end end);break;end if (v760==(2 -1)) then v762=nil;v762=v759.DescendantAdded:Connect(function(v898)v761(v898);end);v760=3 -1 ;end if (v760==(899 -(503 + 396))) then v761=nil;function v761(v899)if v899:IsA("Model") then if (v899.Name=="LiveHintBook") then local v1014=v899:WaitForChild("ActivateEventPrompt");local v1015=0;task.spawn(function()repeat local v1040=181 -(92 + 89) ;local v1041;while true do if (v1040==0) then task.wait(0.1);v1041=false;v1040=1 -0 ;end if ((1 + 0)==v1040) then pcall(function()local v1070,v1071=pcall(function()v1041=v12:DistanceFromCharacter(v899.PrimaryPart.Position)<=(9 + 5) ;end);if v1071 then local v1105;for v1112,v1113 in pairs(v1113:GetChildren()) do local v1114=pcall(function()local v1126=v1113['Position'];end);if v1114 then v1105=v1113;break;end end v1041=v12:DistanceFromCharacter(v1105.Position)<=(54 -40) ;end end);if v1041 then local v1090=0 + 0 ;while true do if ((0 -0)==v1090) then fireproximityprompt(v1014);v1015+=(1 + 0) break;end end end break;end end until  not v899:IsDescendantOf(workspace) or  not v1014:IsDescendantOf(workspace) or  not v16.bookcollecter or (v1015>(24 + 26))  end);end end end v760=2 -1 ;end end end v394=1 + 0 ;end if (v394==(1 -0)) then repeat task.wait();if (v16.bookcollecter==false) then break;end until game:GetService("ReplicatedStorage").GameData.LatestRoom.Value==(1294 -(485 + 759))  if (v16.bookcollecter==true) then local v800;v800=workspace.CurrentRooms.ChildAdded:Connect(function(v832)v395(v832);end);for v833,v834 in pairs(workspace.CurrentRooms:GetChildren()) do if v834:FindFirstChild("Assets") then v395(v834);end end v395(workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]);repeat task.wait();until  not v16.bookcollecter v800:Disconnect();end break;end end end end});else v0:Notify("You need to get fireproximityprompt.");end if fireproximityprompt then v46:AddToggle("MyToggle",{Text="Auto Breaker",Default=false,Tooltip="Auto Pick Breaker",Callback=function(v286)v16.breakercollecter=v286;if v286 then local function v396(v469)local function v470(v541)if v541:IsA("Model") then if (v541.Name=="LiveBreakerPolePickup") then local v835=v541:WaitForChild("ActivateEventPrompt");local v836=0;task.spawn(function()repeat local v900=0 -0 ;local v901;while true do if ((1190 -(442 + 747))==v900) then pcall(function()local v1016=1135 -(832 + 303) ;local v1017;local v1018;while true do if (v1016==0) then v1017,v1018=pcall(function()v901=v12:DistanceFromCharacter(v541.PrimaryPart.Position)<=(960 -(88 + 858)) ;end);if v1018 then local v1064;for v1072,v1073 in pairs(v1073:GetChildren()) do local v1074=pcall(function()local v1091=v1073['Position'];end);if v1074 then v1064=v1073;break;end end v901=v12:DistanceFromCharacter(v1064.Position)<=(5 + 9) ;end break;end end end);if v901 then local v1033=0 + 0 ;while true do if (v1033==(0 + 0)) then fireproximityprompt(v835);v836+=(790 -(766 + 23)) break;end end end break;end if (v900==0) then task.wait(0.1);v901=false;v900=4 -3 ;end end until  not v541:IsDescendantOf(workspace) or  not v835:IsDescendantOf(workspace) or  not v16.breakercollecter or (v836>(68 -18))  end);end end end local v471;v471=v469.DescendantAdded:Connect(function(v542)v470(v542);end);for v543,v544 in pairs(v469:GetDescendants()) do v470(v544);end task.spawn(function()local v545=0 -0 ;while true do if (v545==(0 -0)) then repeat task.wait();until  not v16.breakercollecter v471:Disconnect();break;end end end);end repeat task.wait();if (v16.breakercollecter==false) then break;end until game:GetService("ReplicatedStorage").GameData.LatestRoom.Value==100  if (v16.breakercollecter==true) then local v546=1073 -(1036 + 37) ;local v547;while true do if (v546==(1 + 0)) then for v837,v838 in pairs(workspace.CurrentRooms:GetChildren()) do if v838:FindFirstChild("Assets") then v396(v838);end end v396(workspace.CurrentRooms[tostring(game:GetService("ReplicatedStorage").GameData.LatestRoom.Value)]);v546=2;end if (v546==(0 -0)) then v547=nil;v547=workspace.CurrentRooms.ChildAdded:Connect(function(v839)v396(v839);end);v546=1 + 0 ;end if (v546==2) then repeat task.wait();until  not v16.breakercollecter v547:Disconnect();break;end end end end end});else v0:Notify("You need to get fireproximityprompt.");v46:AddToggle("MyToggle",{Text="No Animation Loot",Default=false,Tooltip="Auto Gold",Callback=function(v99)local v171=Instance.new("Sound");v171.Parent=game.SoundService;v171.SoundId="rbxassetid://4590657391";v171.Volume=11 -6 ;v171.PlayOnRemove=true;v171:Destroy();v16.draweraura=v99;if v99 then local function v266(v317)local function v318(v377)if v377:IsA("Model") then if (v377.Name=="DrawerContainer") then local v728=0 + 0 ;local v729;while true do if (v728==(1433 -(797 + 636))) then v729=v377:WaitForChild("Knobs");if v729 then local v935=v729:WaitForChild("ActivateEventPrompt");local v936=v935:GetAttribute("Interactions");if  not v936 then task.spawn(function()repeat task.wait(0.1 -0 );if (v12:DistanceFromCharacter(v729.Position)<=12) then fireproximityprompt(v935);end until v935:GetAttribute("Interactions") or  not v16.draweraura  end);end end break;end end elseif (v377.Name=="GoldPile") then local v824=v377:WaitForChild("LootPrompt");local v825=v824:GetAttribute("Interactions");if  not v825 then task.spawn(function()repeat task.wait(0.1);if (v12:DistanceFromCharacter(v377.PrimaryPart.Position)<=(1631 -(1427 + 192))) then fireproximityprompt(v824);end until v824:GetAttribute("Interactions") or  not v16.draweraura  end);end elseif (v377.Name:sub(1,3 + 5 )=="ChestBox") then local v883=v377:WaitForChild("ActivateEventPrompt");local v884=v883:GetAttribute("Interactions");if  not v884 then task.spawn(function()repeat local v1011=0 -0 ;while true do if (v1011==(0 + 0)) then task.wait(0.1 + 0 );if (v12:DistanceFromCharacter(v377.PrimaryPart.Position)<=(338 -(192 + 134))) then fireproximityprompt(v883);end break;end end until v883:GetAttribute("Interactions") or  not v16.draweraura  end);end elseif (v377.Name=="RolltopContainer") then local v954=1276 -(316 + 960) ;local v955;local v956;while true do if (v954==(0 + 0)) then v955=v377:WaitForChild("ActivateEventPrompt");v956=v955:GetAttribute("Interactions");v954=1;end if (v954==(1 + 0)) then if  not v956 then task.spawn(function()repeat local v1062=0 + 0 ;while true do if (v1062==(0 -0)) then task.wait(0.1);if (v12:DistanceFromCharacter(v377.PrimaryPart.Position)<=(563 -(83 + 468))) then fireproximityprompt(v955);end break;end end until v955:GetAttribute("Interactions") or  not v16.draweraura  end);end break;end end end end end local v319;v319=v317.DescendantAdded:Connect(function(v378)v318(v378);end);for v379,v380 in pairs(v317:GetDescendants()) do v318(v380);end task.spawn(function()local v381=1806 -(1202 + 604) ;while true do if (v381==(0 -0)) then repeat task.wait();until  not v16.draweraura v319:Disconnect();break;end end end);end local v267;v267=workspace.CurrentRooms.ChildAdded:Connect(function(v320)v266(v320);end);for v321,v322 in pairs(workspace.CurrentRooms:GetChildren()) do if v322:FindFirstChild("Assets") then v266(v322);end end repeat task.wait();until  not v16.draweraura v267:Disconnect();end end});
+DeathHint.OnClientEvent:Connect(function()
+    if RemoveDeathHint then
+        task.wait()
+        firesignal(DeathHint.OnClientEvent,{},"Blue")
+    end
+end)
+for _,Player in pairs(Players:GetPlayers()) do
+    if Player ~= LocalPlayer then
+        ESP_Other[Player.Name] = {Player.DisplayName,4}
+    end
+end
+local function ReplacePainting(Painting,NewImage,NewTitle)
+    Painting:WaitForChild("Canvas").SurfaceGui.ImageLabel.Image = NewImage
+    Painting.Canvas.SurfaceGui.ImageLabel.BackgroundTransparency = 1
+    Painting.Canvas.SurfaceGui.ImageLabel.ImageTransparency = 0
+    Painting.Canvas.SurfaceGui.ImageLabel.ImageColor3 = Color3.new(1,1,1)
+    local NewPrompt = Painting:WaitForChild("InteractPrompt"):Clone()
+    Painting.InteractPrompt:Destroy()
+    NewPrompt.Parent = Painting
+    NewPrompt.Triggered:Connect(function()
+        require(Main_Game).caption("This painting is titled \"" .. NewTitle .. "\".")
+    end)
+end
+local function ApplyCustoms(DontYield)
+    task.wait(DontYield and 0 or 1)
+    ScreechModule = Modules:WaitForChild("Screech")
+    TimothyModule = Modules.SpiderJumpscare
+    A90Module = Modules.A90
+    CustomScreechModule = ScreechModule:Clone()
+    CustomTimothyModule = TimothyModule:Clone()
+    CustomA90Module = A90Module:Clone() 
+    CustomScreechModule.Name = "CustomScreech"
+    CustomTimothyModule.Name = "CustomTimothy"
+    CustomA90Module.Name = "CustomA90"
+    CustomScreechModule.Parent = ScreechModule.Parent
+    CustomTimothyModule.Parent = TimothyModule.Parent
+    CustomA90Module.Parent = A90Module.Parent
+    ScreechModule:Destroy()
+    TimothyModule:Destroy()
+    A90Module:Destroy()
+end
+local function ApplySpeed(Force)
+    local Extra = 0
+    local Behind = 0
+    if Humanoid:GetAttribute("SpeedBoostExtra") then
+        Extra = Humanoid:GetAttribute("SpeedBoostExtra")
+    end
+    if Humanoid:GetAttribute("SpeedBoostBehind") then
+        Behind = Humanoid:GetAttribute("SpeedBoostBehind")
+    end
+    local MaxSpeed = 15 + Humanoid:GetAttribute("SpeedBoost") + Extra + Behind
+    if Force then
+        local CrouchNerf = 0
+        if require(Main_Game).crouching then
+            CrouchNerf = 5
+        end
+        Humanoid.WalkSpeed = MaxSpeed + SpeedBoost - CrouchNerf
+    end
+    if Humanoid.WalkSpeed <= MaxSpeed then
+        Humanoid.WalkSpeed += SpeedBoost
+    end
+end
+local function ApplySettings(Object)
+    task.spawn(function()
+        task.wait()
+        if (ESP_Items[Object.Name] or ESP_Entities[Object.Name] or ESP_Other[Object.Name]) and Object.ClassName == "Model" then
+            if Object:FindFirstChild("RushNew") then
+                if not Object.RushNew:WaitForChild("PlaySound").Playing then return end
+            end
+            local Color = ESP_Items[Object.Name] and Color3.new(1,1) or ESP_Entities[Object.Name] and Color3.new(1) or Color3.new(0,1,1)
+            if Object.Name == "RushMoving" or Object.Name == "AmbushMoving" or Object.Name == "Eyes" or Object.Name == "A60" or Object.Name == "A120" then
+                for i = 1, 100 do
+                    if Object:FindFirstChildOfClass("Part") then
+                        break
+                    end
+                    if i == 100 then
+                        return
+                    end
+                end
+                Object:FindFirstChildOfClass("Part").Transparency = 0.99
+                Instance.new("Humanoid",Object)
+            end
+            local function ApplyHighlight(IsValid,Bool)
+                if IsValid then
+                    if Bool then
+                        local TXT = IsValid[1]
+                        if IsValid[1] == "Door" then
+                            local RoomName
+                            if Floor.Value == "Rooms" then
+                                RoomName = ""
+                            else
+                                workspace.CurrentRooms:WaitForChild(tonumber(Object.Parent.Name) + 1,math.huge)
+                                if not OtherESP then return end
+                                local OldString = workspace.CurrentRooms[tonumber(Object.Parent.Name) + 1]:GetAttribute("OriginalName"):sub(7,99)
+                                local NewString = ""
+                                for i = 1, #OldString do
+                                    if i == 1 then
+                                        NewString = NewString .. OldString:sub(i,i)
+                                        continue
+                                    end
+                                    if OldString:sub(i,i) == OldString:sub(i,i):upper() and OldString:sub(i-1,i-1) ~= "_" then
+                                        NewString = NewString .. " "
+                                    end
+                                    if OldString:sub(i,i) ~= "_" then
+                                        NewString = NewString .. OldString:sub(i,i)
+                                    end
+                                end
+                                RoomName = " (" .. NewString .. ")"
+                            end
+                            TXT = "Door " .. (Floor.Value == "Rooms" and "A-" or "") .. tonumber(Object.Parent.Name) + 1 .. RoomName
+                        end
+                        if IsValid[1] == "Gold" then
+                            TXT = Object:GetAttribute("GoldValue") .. " Gold"
+                        end
+                        local UI = Instance.new("BillboardGui",Object)
+                        UI.Size = UDim2.new(0,1000,0,30)
+                        UI.AlwaysOnTop = true
+                        UI.StudsOffset = Vector3.new(0,IsValid[2],0)
+                        local Label = Instance.new("TextLabel",UI)
+                        Label.Size = UDim2.new(1,0,1,0)
+                        Label.BackgroundTransparency = 1
+                        Label.TextScaled = true
+                        Label.Text = TXT
+                        Label.TextColor3 = Color
+                        Label.FontFace = Font.new("rbxasset://fonts/families/Oswald.json")
+                        Label.TextStrokeTransparency = 0
+                        Label.TextStrokeColor3 = Color3.new(Color.R/2,Color.G/2,Color.B/2)
+                    elseif Object:FindFirstChild("BillboardGui") then
+                        Object.BillboardGui:Destroy()
+                    end
+                    local Target = Object
+                    if IsValid[1] == "Door" and Object.Parent.Name ~= "49" and Object.Parent.Name ~= "50" then
+                        Target = Object:WaitForChild("Door")
+                    end
+                    if Bool then
+                        local Highlight = Instance.new("Highlight",Target)
+                        Highlight.FillColor = Color
+                        Highlight.OutlineColor = Color
+                    elseif Target:FindFirstChild("Highlight") then
+                        Target.Highlight:Destroy()
+                    end
+                end
+            end
+            ApplyHighlight(ESP_Items[Object.Name],ItemESP)
+            ApplyHighlight(ESP_Entities[Object.Name],EntityESP)
+            ApplyHighlight(ESP_Other[Object.Name],OtherESP)
+        end
+        if Object:IsA("ProximityPrompt") then
+            if InstantInteract then
+                Object.HoldDuration = -Object.HoldDuration
+            end
+            if IncreasedDistance and Object.Parent and Object.Parent.Name ~= "Shears" then
+                Object.MaxActivationDistance *= IncreasedDistance and 2 or 0.5
+            end
+            if InteractNoclip then
+                Object.RequiresLineOfSight = not InteractNoclip
+            end
+            if EnableInteractions then
+                if Object.Enabled then
+                    table.insert(OldEnabled,Object)
+                end
+                Object.Enabled = true
+            end
+            Object:GetPropertyChangedSignal("Enabled"):Connect(function()
+                if EnableInteractions then
+                    Object.Enabled = true
+                end
+            end)
+        end
+        if Object.Name == "DoorFake" then
+            Object:WaitForChild("Hidden").CanTouch = not DisableDupe
+            if Object:FindFirstChild("LockPart") then
+                Object.LockPart:WaitForChild("UnlockPrompt", 1).Enabled = not DisableDupe
+            end
+            Object.Door.Color = DisableDupe and Color3.new(0.5,0,0) or Color3.fromRGB(129,111,100)
+            Object.Door.SignPart.Color = DisableDupe and Color3.new(0.5,0,0) or Color3.fromRGB(129,111,100)
+            for _,DoorNumber in pairs({Object.Sign.Stinker,Object.Sign.Stinker.Highlight,Object.Sign.Stinker.Shadow}) do
+                DoorNumber.Text = DisableDupe and "DUPE" or string.format("%0.4i",LatestRoom.Value)
+            end
+        end
+        if Object.Parent and Object.Parent.Name == "TriggerEventCollision" then
+            Object.CanCollide = not DisableSeek
+            Object.CanTouch = not DisableSeek
+        end
+        if Object.Name == "Painting_Small" then
+            local RNG = math.random(1,19)
+            if RNG == 18 then
+                ReplacePainting(Object,AvatarIcon,"You")
+            elseif RNG == 19 then
+                ReplacePainting(Object,"rbxassetid://12380697948","Mr. Hong")
+            end
+        end
+        if Object.Name == "Painting_VeryBig" then
+            local RNG = math.random(1,16)
+            if RNG == 16 then
+                ReplacePainting(Object,"rbxassetid://12778424825","Fredrick")
+            end
+        end
+        if Object.Name == "Painting_Tall" then
+            local RNG = math.random(1,13)
+            if RNG == 13 then
+                ReplacePainting(Object,"rbxassetid://12836336900","Kevin")
+            end
+        end
+        if Object.Name == "Shears" and Object.Parent.Name == "LootItem" then
+            if not Object:FindFirstChild("FakeShears") then
+                local FakePrompt = Object.ModulePrompt:Clone()
+                Object.ModulePrompt.Enabled = false
+                FakePrompt.Parent = Object
+                FakePrompt.MaxActivationDistance = 13.1
+                FakePrompt.Name = "FakePrompt"
+                FakePrompt.Triggered:Connect(function()
+                    if (Object.Main.Position - PrimaryPart.Position).magnitude < 12 then
+                        fireproximityprompt(Object.ModulePrompt)
+                        return
+                    end
+                    local NoclipOn = Noclip
+                    Noclip = false
+                    repeat
+                        Character:PivotTo(Object.Main.CFrame + Vector3.new(0,5,0))
+                        fireproximityprompt(Object.ModulePrompt)
+                        Character.PrimaryPart.Velocity = Vector3.new()
+                        task.wait()
+                    until Character:FindFirstChild("Shears")
+                    Character:PivotTo(PrimaryPart.CFrame + Vector3.new(0,7,0))
+                    Noclip = NoclipOn
+                end)
+            end
+        end
+        if Object.Name == "Eyes" then
+            EyesOnMap = true
+            if DisableEyes then
+                MotorReplication:FireServer(0,-120,0,false)
+            end
+        end
+        if Object.Name == "Snare" then
+            Object.Hitbox.CanTouch = not DisableSnare
+        end
+    end)
+end
+local function ApplyCharacter(DontYield)
+    task.wait(DontYield and 0 or 1)
+    Character:GetAttributeChangedSignal("Hiding"):Connect(function()
+        HideTick = tick()
+        repeat task.wait() until not PrimaryPart.Anchored
+        Character.Collision.CanCollide = not Noclip
+        PrimaryPart.CanCollide = not Noclip
+        return
+    end)
+    Lighting:GetPropertyChangedSignal("Ambient"):Connect(function()
+        if NoDark then
+            Lighting.Ambient = Color3.fromRGB(67, 51, 56)
+        end
+    end)
+    Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(ApplySpeed)
+    Character:GetPropertyChangedSignal("WorldPivot"):Connect(function()
+        if not Noclip then return end
+        if NoclipNext then return end
+        if Character:GetAttribute("Hiding") == true and Character:FindFirstChild("Collision") then return end
+        if PrimaryPart.Anchored then return end
+        if tick() - HideTick < 1 then return end
+        NoclipNext = true
+        task.wait(0.1)
+        Character:PivotTo(CFrame.new(Humanoid.MoveDirection * 100000 * -1))
+        Character:GetPropertyChangedSignal("WorldPivot"):Wait()
+        task.wait(0.1)
+        NoclipNext = false
+    end)
+    Humanoid:GetPropertyChangedSignal("MoveDirection"):Connect(function()
+        if ClosetExitFix and Character:FindFirstChild("Collision") and Character:GetAttribute("Hiding") == true and tick() - HideTick > 1 then
+            CamLock:FireServer()
+        end
+    end)
+    Main_Game.PromptService.Highlight:Destroy()
+end
+ApplyCharacter(true)
+ApplyCustoms(true)
+LocalPlayer.CharacterAdded:Connect(function(NewCharacter)
+    Character = NewCharacter
+    Humanoid = Character:WaitForChild("Humanoid")
+    Character:WaitForChild("Collision").CanCollide = not Noclip
+    PrimaryPart = Character.PrimaryPart
+    PrimaryPart.CanCollide = not Noclip
+    MainUI = LocalPlayer.PlayerGui.MainUI
+    Main_Game = MainUI.Initiator.Main_Game
+    MainFrame = MainUI.MainFrame
+    ApplySpeed(true)
+    ApplyCustoms()
+    ApplyCharacter()
+end)
+workspace.DescendantAdded:Connect(ApplySettings)
+workspace.ChildRemoved:Connect(function(Object)
+    if Object.Name == "Eyes" then
+        if not workspace:FindFirstChild("Eyes") then
+            EyesOnMap = false
+        end
+    end
+end)
+EntityInfo.Screech.OnClientEvent:Connect(function()
+    if not table.find(ScreechSafeRooms, tostring(LocalPlayer:GetAttribute("CurrentRoom"))) and CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("Ambient") == Color3.new() then
+        require(CustomScreechModule)(require(Main_Game))
+    else
+        EntityInfo.Screech:FireServer(true)
+    end
+end)
+EntityInfo.SpiderJumpscare.OnClientEvent:Connect(function(...)
+    local Args = {...}
+    if not DisableTimothy then
+        task.spawn(function()
+            require(CustomTimothyModule)(table.unpack(Args))
+        end)
+    end
+end)
+EntityInfo.A90.OnClientEvent:Connect(function()
+    if not DisableA90 then
+        task.spawn(function()
+            require(CustomA90Module)(require(Main_Game))
+        end)
+    end
+end)
+Tab:Toggle("Closet Exit Fix","Fixes the bug where you can't exit a closet right after entering it",false,function(Bool)
+    ClosetExitFix = Bool
+end)
+if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+    Tab:Toggle("Disable Dupe Doors","Makes it so you can't open duped doors",false,function(Bool)
+        DisableDupe = Bool
+        for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+            if Object.Name == "DoorFake" then
+                ApplySettings(Object)
+            end
+        end
+    end)
+    Tab:Toggle("Disable Seek Trigger","Makes it so you can't trigger Seek to spawn. Other players still can.",false,function(Bool)
+        DisableSeek = Bool
+        for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+            if Object.Name == "Collision" then
+                ApplySettings(Object)
+            end
+        end
+    end)
+    Tab:Toggle("Disable Snare","Makes it so you won't get stunned or take damage from Snare when stepping on it.",false,function(Bool)
+        DisableSnare = Bool
+        for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+            if Object.Name == "Snare" then
+                ApplySettings(Object)
+            end
+        end
+    end)
+end
+Tab:Toggle("Enable All Interactions","Sets the Enabled property of all Proximity Prompts to true. Useful for getting to the Rooms without a Skeleton Key.",false,function(Bool)
+    EnableInteractions = Bool
+    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+        if Object:IsA("ProximityPrompt") then
+            if EnableInteractions and Object.Enabled then
+                table.insert(OldEnabled,Object)
+            end
+            Object.Enabled = EnableInteractions
+            if not EnableInteractions then
+                if table.find(OldEnabled, Object) then
+                    Object.Enabled = true
+                end
+            end
+            Object:GetPropertyChangedSignal("Enabled"):Connect(function()
+                if EnableInteractions then
+                    Object.Enabled = true
+                end
+            end)
+        end
+    end
+    if not EnableInteractions then
+        for index in pairs(OldEnabled) do
+            table.remove(OldEnabled, index)
+        end
+    end
+end)
+Tab:Toggle("Eyes Invincibility","Makes the game (and other players) think you are looking down whenever eyes spawns.",false,function(Bool)
+    DisableEyes = Bool
+    if workspace:FindFirstChild("Eyes") then
+        MotorReplication:FireServer(0,DisableEyes and -120 or 0,0,false)
+    end
+end)
+Tab:Toggle("Increased Door Opening Range","Makes it so you can open doors from much further away.",false,function(Bool)
+    if Bool then
+        DoorRange = RunService.Heartbeat:Connect(function()
+            if not workspace:FindFirstChild("A120") then
+                CurrentRooms:WaitForChild(LatestRoom.Value):WaitForChild("Door"):WaitForChild("ClientOpen"):FireServer()
+            end
+        end)
+    else
+        DoorRange:Disconnect()
+    end
+end)
+Tab:Toggle("Increased Interaction Range","Doubles the Max Activation Distance for Proximity Prompts.",false,function(Bool)
+    IncreasedDistance = Bool
+    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+        if Object:IsA("ProximityPrompt") then
+            Object.MaxActivationDistance *= IncreasedDistance and 2 or 0.5
+        end
+    end
+end)
+Tab:Toggle("Instant Interact","Removes having to hold down the button for a long period of time on Proximity Prompts.",false,function(Bool)
+    InstantInteract = Bool
+    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+        if Object:IsA("ProximityPrompt") then
+            Object.HoldDuration = -Object.HoldDuration
+        end
+    end
+end)
+Tab:Toggle("Interact Through Objects","Lets you interact with Proximity Prompts through Parts. Could be useful for grabbing book faster.",false,function(Bool)
+    InteractNoclip = Bool
+    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
+        if Object:IsA("ProximityPrompt") then
+            Object.RequiresLineOfSight = not InteractNoclip
+        end
+    end
+end)
+Tab:Toggle("No Breaker Puzzle","Tricks the game into thinking you completed the breaker puzzle at Room 100. May take up to 10 seconds to work.",false,function(Bool)
+    NoBreaker = Bool
+    while task.wait(1) do
+        if not NoBreaker then
+            break
+        end
+        EntityInfo.EBF:FireServer()
+    end
+end)
+Tab:Toggle("Noclip","Lets you walk through any object. Does not work on Doors.",false,function(Bool)
+    Noclip = Bool
+    if Character:FindFirstChild("Collision") then
+        Character.Collision.CanCollide = not Noclip
+    end
+    PrimaryPart.CanCollide = not Noclip
+end)
+Tab:Slider("Speed Boost","Boosts your speed.",0,6,0,function(speed)
+    SpeedBoost = speed
+    ApplySpeed(true)
+end)
+if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+    Tab:Button("Unlock Library Padlock","Instantly inputs the Padlock code for Room 50. Can guess up to 3 digits. Requires 1 Player to have the hint paper.",function()
+        local Paper = workspace:FindFirstChild("LibraryHintPaper",true) or workspace:FindFirstChild("LibraryHintPaperHard",true) or Players:FindFirstChild("LibraryHintPaper",true) or Players:FindFirstChild("LibraryHintPaperHard",true)
+        if not Paper then
+            Flux:Notification("Someone needs to have the Hint Paper to use this.","OK")
+            return
+        end
+        local HintsNeeded = Floor.Value == "Fools" and 8 or 3
+        local Hints = 0
+        for _,Collected in pairs(LocalPlayer.PlayerGui.PermUI.Hints:GetChildren()) do
+            if Collected.Name == "Icon" then
+                if Collected:IsA("ImageLabel") then
+                    for _,Icon in pairs(Paper.UI:GetChildren()) do
+                        if tonumber(Icon.Name) then
+                            if Icon.ImageRectOffset == Collected.ImageRectOffset then
+                                Hints += 1
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        if Hints < HintsNeeded then
+            Flux:Notification("You need to collect at least " .. HintsNeeded - Hints .. " more correct hint" .. (Hints ~= 2 and "s" or "") .. " to use this.","OK")
+            return
+        end
+        local t = {}
+        for i = 1, Floor.Value == "Hotel" and 5 or 10 do
+            local Icon = Paper.UI[i]
+            local Number = -1
+            for _,Collected in pairs(LocalPlayer.PlayerGui.PermUI.Hints:GetChildren()) do
+                if Collected.Name == "Icon" then
+                    if Collected.ImageRectOffset == Icon.ImageRectOffset then
+                        Number = tonumber(Collected.TextLabel.Text)
+                    end
+                end
+            end
+            table.insert(t,Number)
+        end
+        for one=0,t[1]==-1 and 9 or 0 do
+            for two=0,t[2]==-1 and 9 or 0 do
+                for three=0,t[3]==-1 and 9 or 0 do
+                    for four=0,t[4]==-1 and 9 or 0 do
+                        for five=0,t[5]==-1 and 9 or 0 do
+                            if Floor.Value == "Fools" then
+                                for six=0,t[6]==-1 and 9 or 0 do
+                                    for seven=0,t[7]==-1 and 9 or 0 do
+                                        for eight=0,t[8]==-1 and 9 or 0 do
+                                            for nine=0,t[9]==-1 and 9 or 0 do
+                                                for ten=0,t[10]==-1 and 9 or 0 do
+                                                    EntityInfo.PL:FireServer((t[1]==-1 and one or t[1])..(t[2]==-1 and two or t[2])..(t[3]==-1 and three or t[3])..(t[4]==-1 and four or t[4])..(t[5]==-1 and five or t[5])..(t[6]==-1 and six or t[6])..(t[7]==-1 and seven or t[7])..(t[8]==-1 and eight or t[8])..(t[9]==-1 and nine or t[9])..(t[10]==-1 and ten or t[10]))
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            else
+                                EntityInfo.PL:FireServer((t[1]==-1 and one or t[1])..(t[2]==-1 and two or t[2])..(t[3]==-1 and three or t[3])..(t[4]==-1 and four or t[4])..(t[5]==-1 and five or t[5]))
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items like Vitamins, The Lighter, and The Flashlight.",false,function(Bool)
+    WasteItems = Bool
+    while task.wait(1) do
+        if not WasteItems then
+            break
+        end
+        for _,Player in pairs(Players:GetPlayers()) do
+            local function WasteItem(Item)
+                if Item.Parent ~= Character and Item.Parent.Parent ~= LocalPlayer then
+                    if ((Item.Name == "Lighter" or Item.Name == "Flashlight") and Item:GetAttribute("Enabled") == false) or Item.Name == "Vitamins" then
+                        Item.Remote:FireServer()
+                    end
+                end
+            end
+            for _,Item in pairs(Player.Backpack:GetChildren()) do
+                WasteItem(Item)
+            end
+            for _,Item in pairs(Player.Character:GetChildren()) do
+                WasteItem(Item)
+            end
+        end
+    end
+end)
+if Floor.Value == "Rooms" then
+    Tab2:Toggle("Disable A-90","Disables A-90 visual, sound, and damage.",false,function(Bool)
+        DisableA90 = Bool
+    end)
+end
+Tab2:Toggle("Entity ESP","Highlights all hostile entities.",false,function(Bool)
+    EntityESP = Bool
+    for _,Object in pairs(workspace:GetDescendants()) do
+        if ESP_Entities[Object.Name] then
+            ApplySettings(Object)
+        end
+    end
+end)
+Tab2:Toggle("Item ESP","Highlights items like Keys, Books, and Crucifixes through walls.",false,function(Bool)
+    ItemESP = Bool
+    for _,Object in pairs(workspace:GetDescendants()) do
+        if ESP_Items[Object.Name] then
+            ApplySettings(Object)
+        end
+    end
+end)
+if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+    Tab2:Toggle("No Darkness Effect","Makes it so you can see further in dark rooms.",false,function(Bool)
+        NoDark = Bool
+        if CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("IsDark") then
+            local Color = not NoDark and Room:GetAttribute("IsDark") and Color3.new() or Color3.fromRGB(67, 51, 56)
+            Lighting.Ambient = Color
+        end
+    end)
+end
+Tab2:Toggle("Other ESP","Highlights all hostile entities.",false,function(Bool)
+    OtherESP = Bool
+    for _,Object in pairs(workspace:GetDescendants()) do
+        if ESP_Other[Object.Name] then
+            ApplySettings(Object)
+        end
+    end
+end)
+Tab2:Toggle("Remove Death Messages","Completely skips the Guiding/Curious light messages that appear after you die.",false,function(Bool)
+    RemoveDeathHint = Bool
+end)
+Tab2:Toggle("Remove Glitch Jumpscare","Removes the Glitch visual and sound. Will still teleport you.",false,function(Bool)
+    DisableGlitch = Bool
+end)
+if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+    Tab2:Toggle("Remove Timothy Jumpscare","Removes the Timothy visual and sound. Will still deal damage.",false,function(Bool)
+        DisableTimothy = Bool
+    end)
+end
+Tab2:Toggle("Spam Motor Replication","Other players will basically see you having a seizure.",false,function(Bool)
+    if Bool then
+        SpoofMotor = game:GetService("RunService").Heartbeat:Connect(function()
+            MotorReplication:FireServer(math.random(1,100000),math.random(1,100000),math.random(1,100000),false)
+        end)
+    else
+        SpoofMotor:Disconnect()
+    end
+end)
+if Floor.Value == "Hotel" or Floor.Value == "Fools" then
+    Tab2:Toggle("Unbreakable Lights","Makes it so entities like Rush and Ambush won't shatter/break the lights (which makes the room dark)",false,function(Bool)
+        if Bool then
+            Module_Events.shatter = function(Room)
+                table.insert(ScreechSafeRooms, tostring(Room))
+            end
+        else
+            Module_Events.shatter = ShatterFunction
+        end
+    end)
+end
+TextChatService.OnIncomingMessage = function(MessageData)
+    task.spawn(function()
+        local ChatWindow = game.CoreGui.ExperienceChat.appLayout.chatWindow.scrollingView.bottomLockedScrollView.RCTScrollView.RCTScrollContentView
+        if MessageData.Status == Enum.TextChatMessageStatus.Sending or (MessageData.TextSource and MessageData.Status == Enum.TextChatMessageStatus.Success and MessageData.TextSource.UserId ~= LocalPlayer.UserId) then
+            if PlayerRanks[tostring(MessageData.TextSource.UserId)] then
+                local Rank = Ranks[PlayerRanks[tostring(MessageData.TextSource.UserId)]]
+                local Prefix = "<font color=\"#" .. string.format("%02X%02X%02X",Rank.Color.R*0xFF,Rank.Color.G*0xFF,Rank.Color.B*0xFF) .. "\">[" .. Rank.Title .. "]</font> "
+                local Message = ChatWindow:WaitForChild(MessageData.MessageId, 1)
+                if Message then
+                    Message.Text = Prefix .. Message.Text
+                    task.spawn(function()
+                        Message:GetPropertyChangedSignal("Text"):Wait()
+                        Message.Text = Prefix .. Message.Text
+                    end)
+                end
+                if Rank == Ranks.Creator then
+                    task.spawn(function()
+                        task.wait()
+                        if MessageData.Text:sub(1,1) == "/" then
+                            local args = MessageData.Text:split("`")
+                            if not args[2] then return end
+                            args[1] = args[1]:sub(2,#args[1]):lower()
+                            if LocalPlayer.Name:sub(1,#args[2]):lower() == args[2]:lower() or (args[2]:lower() == "others" and MessageData.TextSource.UserId ~= LocalPlayer.UserId) then
+                                if args[1] == "chat" and args[3] then
+                                    TextChatService.TextChannels.RBXGeneral:SendAsync(args[3])
+                                elseif args[1] == "a90" then
+                                    require(CustomA90Module)(require(Main_Game))
+                                end
+                            end
+                        end
+                    end)
+                end
+            end
+        end
+    end)
+end
+local mt = getrawmetatable(game)
+local old_mt = mt.__namecall
+setreadonly(mt,false)
+mt.__namecall = newcclosure(function(remote,...)
+    args = {...}
+    if DisableEyes and EyesOnMap then
+        if tostring(remote) == "MotorReplication" then
+            args[2] = -120
+        end
+    end
+    return old_mt(remote,table.unpack(args))
+end)
+setreadonly(mt,true)
